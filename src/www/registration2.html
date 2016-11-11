@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add Investment History - The Broker's Investment Planner</title>
+        
+        <!-- Bootstrap -->
+        <link rel = 'stylesheet' href = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+        
+        <link rel = 'stylesheet' type = 'text/css' href = '../css/style.css'>
+        
+        <!-- jQuery Library -->
+        <script src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+        
+        <!-- Bootstrap Library -->
+        <script src = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+        
+        <script src = '../app/registration2.js'></script>
+    </head>
+    <body>
+        <table class = 'topTable' style = 'margin-top: 1em; margin-left: 0.5em; width: calc(100% - 1em);'>
+            <tr>
+                <td><img class = 'mainLogo' src = '../img/Main_Logo_(Cropped).png'></td>
+            </tr>
+        </table>
+        <div id = 'investmentHistory' class = container>
+            <div class = 'row' style = 'padding-top: 1em; padding-bottom: 1em;'>
+                Add Investment History
+            </div>
+            <div class = 'row' style = 'padding-bottom: 1em; text-align: center; color: red; font-size: 1em;'>
+                <u>Investment History</u>
+            </div>
+            <div class = 'row' style = 'color: red;'>
+                <div class = 'col-sm-3'>Purchase Date</div>
+                <div class = 'col-sm-3'>Symbol</div>
+                <div class = 'col-sm-3'>Unit Price</div>
+                <div class = 'col-sm-3'>Shares</div>
+            </div>
+            <div class = 'row'></div>
+            <div class = 'row'>
+                <button id = 'create_account' class = 'button' style = 'width: 10em; vertical-align: middle; background-color: red;'><span>Add Investment</span></button>
+                <button id = 'back_to_home' class = 'button' style = 'vertical-align: middle; background-color: green;'><span>Next</span></button>
+            </div>
+        </div>
+    </body>
+</html>

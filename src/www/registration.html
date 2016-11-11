@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create New Account - The Broker's Investment Planner</title>
+        <link rel = 'stylesheet' type = 'text/css' href = '../css/style.css'>
+        
+        <!-- jQuery Library -->
+        <script src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+        
+        <script src = '../app/registration.js'></script>
+    </head>
+    <body>
+        <table class = 'topTable'>
+            <tr>
+                <td><img class = 'mainLogo' src = '../img/Main_Logo_(Cropped).png'></td>
+            </tr>
+        </table>
+        <table class = 'login'>
+            <tr><td style = 'padding-top: 1em;'>Create New Account</td></tr>
+            <tr><td><input id = 'emailAccount' class = 'loginTable' type = 'text' placeholder = 'Email Address'></td></tr>
+            <tr><td id = 'emailErr' class = 'loginErr' align = 'left'><br></td></tr>
+            <tr><td><input id = 'password' class = 'loginTable' type = 'password' placeholder = 'Password'></td></tr>
+            <tr><td><input id = 'password2' class = 'loginTable' type = 'password' placeholder = 'Password Again'></td></tr>
+            <tr><td id = 'passwordErr' class = 'loginErr' align = 'left'><br></td></tr>
+            <tr><td><input id = 'name' class = 'loginTable' type = 'text' placeholder = 'Full Name'></td></tr>
+            <tr><td id = 'nameErr' class = 'loginErr' align = 'left'><br></td></tr>
+            <tr><td align = 'left' style = 'padding-left: 0.87em; padding-bottom: 0em; color: orange;'>Date of Birth</td></tr>
+            <tr><td><input id = 'DOB' class = 'loginTable' type = 'date' placeholder = 'DOB' style = 'margin-top:0em;'></td></tr>
+            <tr><td id = 'DOBErr' class = 'loginErr' align = 'left'><br></td></tr>
+            <tr>
+                <td>
+                    <button id = 'create_account' class = 'button' style = 'vertical-align: middle; background-color: red;'><span>Next</span></button>
+                    <button id = 'back_to_home' class = 'button' style = 'vertical-align: middle; background-color: green;'><span>Home Page</span></button>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

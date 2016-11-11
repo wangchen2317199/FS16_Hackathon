@@ -1,0 +1,112 @@
+body {
+    background-color: floralwhite;
+    background-image: url(http://www.planwallpaper.com/static/images/bicycle-1280x720.jpg);
+    background-repeat: no-repeat;
+    background-position: 0.5em 6em;
+    background-size: calc(100% - 1em);
+}
+
+.topTable {
+    background-color: chocolate;
+    width: 100%;
+    margin: 0px;
+}
+
+.mainLogo {
+    height: 5em;
+    width: auto;
+}
+
+.login {
+    border-radius: 1em;
+    border: 2px solid darkred;
+    color: darkred;
+    width: calc(50% - 4em);
+    margin-top: 4em;
+    margin-left: 2em;
+    font-family: 'Trebuchet MS';
+    font-size: 1.2em;
+    background-color: beige;
+    text-align: center;
+}
+
+.loginTable {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid orange;
+    width: calc(100% - 2em);
+    font-family: 'Trebuchet MS';
+    font-size: 0.8em;
+    color: orange;
+    margin-top: 1em;
+}
+
+.loginTable:focus {
+    outline: none;
+}
+
+#forgotPassword {
+    font-family: 'Arial';
+    font-size: 0.6em;
+}
+
+.button {
+    display: inline-block;
+    border-radius: 0.5em;
+    border: none;
+    color: white;
+    text-align: center;
+    font-size: 1em;
+    padding: 0.6em;
+    width: 8em;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 0.4em;
+    margin-top: 2em;
+    margin-bottom: 1em;
+}
+
+.button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.button span:after {
+    content: '»';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -1em;
+    transition: 0.5s;
+}
+
+.button:hover span {
+    padding-right: 1.5em;
+}
+
+.button:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+.loginErr {
+    padding-left: 1.37em;
+    font-family: 'Arial';
+    font-size: 0.6em;
+    color: red;
+}
+
+#investmentHistory {
+    border-radius: 1em;
+    border: 2px solid darkred;
+    color: darkred;
+    width: calc(50% - 4em);
+    margin-top: 4em;
+    margin-left: 2em;
+    font-family: 'Trebuchet MS';
+    font-size: 1.2em;
+    background-color: beige;
+    text-align: center;
+}
