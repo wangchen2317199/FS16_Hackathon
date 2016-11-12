@@ -77,15 +77,10 @@
                         <option value = 'LBLAX'>LBLAX</option>
                     </select>
                 </div>
-<!--                <input id = 'symbol' class = 'loginTable' type = 'text' placeholder = 'Stock Symbol'>-->
             </div>
-<!--
-            <div class = 'row'>
-                <p id = 'symbolErr' class = 'loginErr' align = 'left' style = 'padding-top: 0.3em;'><br></p>
-            </div>
--->
-            <div class = 'row'>
-                <input id = 'price' type = 'number' placeholder = 'Price per Share'>
+            <div id = 'autoPrice' class = 'row'>
+                <button class = 'd' style = 'margin-bottom: 0.1em;' onclick = 'getP();'>GetPrice</button>
+                <a id = 'price'></a>
             </div>
             <div class = 'row'>
                 <p id = 'priceErr' class = 'loginErr' align = 'left' style = 'padding-top: 0.3em;'><br></p>

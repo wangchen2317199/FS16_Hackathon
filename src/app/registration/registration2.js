@@ -52,10 +52,10 @@ $(
                 var symbol = e.options[e.selectedIndex].value;
                 
                 // Check if the price is empty.
-                var price = $('#price').val();
+                var price = $('#price').text();
                 if (price.length === 0 || price === null) {
                     valid = false;
-                    $('#priceErr').replaceWith('<p id = \'priceErr\' class = \'loginErr\' align = \'left\' style = \'padding-top: 0.3em;\'>Price cannot be empty.</p>');
+                    $('#priceErr').replaceWith('<p id = \'priceErr\' class = \'loginErr\' align = \'left\' style = \'padding-top: 0.3em;\'>The price cannot be empty.</p>');
                 }
                 else {
                     $('#priceErr').replaceWith('<p id = \'priceErr\' class = \'loginErr\' align = \'left\' style = \'padding-top: 0.3em;\'><br></p>');
@@ -97,8 +97,8 @@ $(
                     $('#addInvestment').hide();
                     $('#next').replaceWith('<button id = \'next\' class = \'button\' style = \'vertical-align: middle; background-color: green;\' onclick = \'next();\'><span>Next</span></button>');
                     $('#date').val('');
-//                    $('#stockSymbol').val('');
-                    $('#price').val('');
+                    $('#autoPrice').val('');
+                    $('#price').text('');
                     $('#shares').val('');
                 }
             }
@@ -127,7 +127,6 @@ function next() {
     
     localStorage.setItem('investments', final_inv_string);
     
-    alert(localStorage.getItem('investments'));
     window.location.href = 'registration3.html';
 }
 
@@ -163,4 +162,35 @@ function delInv(j) {
         );
         node = node.next;
     }
+}
+
+function getP() {
+    var dateValue = $('#date').val();
+    var e = document.getElementById('stockSymbol');
+    var symbol = e.options[e.selectedIndex].value;
+    $.ajax(
+        {
+            url: 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22' +
+            symbol + '%22%20and%20startDate%20%3D%20%22' + dateValue + '%22%20and%20endDate%20%3D%20%22' + dateValue + '%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=',
+            method: 'GET',
+            success: function(result) {
+                var closePrice = result['query']['results'];
+                var finalPrice;
+                if (closePrice === null || closePrice.length === 0) {
+                    alert('Error!  Cannot get the price!  Check the date!');
+                }
+                else {
+                    finalPrice = closePrice['quote']['Close'];
+                    $('#autoPrice').replaceWith(
+                        '<div id = \'autoPrice\' class = \'row\'><button class = \'d\' style = \'margin-bottom: 0.1em;\' onclick = \'getP();\'>GetPrice</button><a id = \'price\'>' +
+                        '  $' + finalPrice + '</a></div>'
+                    );
+                    $('#autoPrice').val(finalPrice);
+                }
+            },
+            error: function(error) {
+                alert('Error!  Cannot get the price!');
+            }
+        }
+    );
 }
