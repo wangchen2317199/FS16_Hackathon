@@ -149,3 +149,10 @@ body {
 #stockSymbol:focus {
     outline: none;
 }
+
+.d {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 0.5em;
+}

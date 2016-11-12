@@ -1,3 +1,6 @@
+var investments; // Global variable
+var index; // Controls deletion.
+
 $(
     function() {
         $('#add_investment').click(
@@ -13,6 +16,8 @@ $(document).ready(
     function() {
         $('#addInvestment').hide();
         localStorage.setItem('investments', '');
+        investments = new SinglyList();
+        index = 0;
     }
 );
 
@@ -68,12 +73,25 @@ $(
                 
                 // Append of investments if the input is valid.
                 if (valid) {
+                    var currentInvestment = {
+                        index: index,
+                        date: date,
+                        symbol: symbol,
+                        price: price,
+                        shares: shares
+                    };
+                    
+                    index++;
+                    
+                    investments.add(currentInvestment);
+                     
                     $('#investments').append(
                         '<div class = \'row\'>' +
                         '<div class = \'col-sm-3\'>' + date + '</div>' +
-                        '<div class = \'col-sm-3\'>' + symbol + '</div>' +
+                        '<div class = \'col-sm-2\'>' + symbol + '</div>' +
                         '<div class = \'col-sm-3\'>' + price + '</div>' +
-                        '<div class = \'col-sm-3\'>' + shares + '</div>' +
+                        '<div class = \'col-sm-2\'>' + shares + '</div>' +
+                        '<div class = \'col-sm-2\'>' + '<button class = \'d\' onclick = \'delInv(' + currentInvestment.index + ');\'>Delete</button>' + '</div>' +
                         '</div>'
                     );
                     $('#addInvestment').hide();
@@ -82,24 +100,6 @@ $(
 //                    $('#stockSymbol').val('');
                     $('#price').val('');
                     $('#shares').val('');
-                    
-                    var inv = localStorage.getItem('investments');
-                    inv = inv.substr(0, inv.length - 1); // Remove the last ']' character.
-                    var currentInvestment = {
-                        date: date,
-                        symbol: symbol,
-                        price: price,
-                        shares: shares
-                    }
-                    
-                    if (inv.length === 0 || inv === null) {
-                        inv = '[' + JSON.stringify(currentInvestment);
-                    }
-                    else {
-                        inv += ',' + JSON.stringify(currentInvestment);
-                    }
-                    
-                    localStorage.setItem('investments', inv + ']');
                 }
             }
         );
@@ -107,5 +107,60 @@ $(
 );
 
 function next() {
+    var final_inv_string = '[';
+    var firstTime = true;
+    var node = investments.head;
+    
+    while (node) {
+        if (firstTime) {
+            final_inv_string += JSON.stringify(node.data);
+            firstTime = false;
+        }
+        else {
+            final_inv_string += ', ' + JSON.stringify(node.data);
+        }
+        
+        node = node.next;
+    }
+    
+    final_inv_string = final_inv_string + ']';
+    
+    localStorage.setItem('investments', final_inv_string);
+    
+    alert(localStorage.getItem('investments'));
     window.location.href = 'registration3.html';
+}
+
+function delInv(j) {
+    var node = new Node();
+    node = investments.head;
+    var position = 1;
+    while (node) {
+        if (node.data.index === j) {
+            break;
+        }
+        else {
+            node = node.next;
+            position++;
+        }
+    }
+    investments.remove(position);
+    
+    var current;
+    node = investments.head;
+    $('#investments').replaceWith('<div id = \'investments\'></div>');
+    
+    while (node) {
+        current = node.data;
+        $('#investments').append(
+            '<div class = \'row\'>' +
+            '<div class = \'col-sm-3\'>' + current.date + '</div>' +
+            '<div class = \'col-sm-2\'>' + current.symbol + '</div>' +
+            '<div class = \'col-sm-3\'>' + current.price + '</div>' +
+            '<div class = \'col-sm-2\'>' + current.shares + '</div>' +
+            '<div class = \'col-sm-2\'>' + '<button class = \'d\' onclick = \'delInv(' + current.index + ');\'>Delete</button>' + '</div>' +
+            '</div>'
+        );
+        node = node.next;
+    }
 }
