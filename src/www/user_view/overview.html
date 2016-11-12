@@ -2,7 +2,17 @@
 <html>
     <head>
         <title>Account Overview - The Broker's Investment Planner</title>
-        
+      
+<!--        google chart-->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>     
+        <script> 
+
+            google.charts.load('current', {packages: ['corechart', 'line']});
+          //  google.charts.setOnLoadCallback(drawCurveTypes);
+
+        </script>
+      
+      
         <!-- Bootstrap -->
         <link rel = 'stylesheet' href = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
         
@@ -51,10 +61,12 @@
                     </div>
                 </div>
                 <div class = 'col-sm-1'></div>
-                <div class = 'col-sm-5' style = 'background-color: pink; border-radius: 2em; border: 2px solid darkred;'>
+                <div class = 'col-sm-5' style = 'background-color: pink; border-radius: 2em; border: 2px solid darkred;' id="chart_div">
+<!--
                     <br><br><br><br><br><br><br><br>
                     Graph goes here.
                     <br><br><br><br><br><br><br><br><br>
+-->
                 </div>
             </div>
             <div class = 'row'>
