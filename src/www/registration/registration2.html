@@ -43,18 +43,45 @@
             </div>
             <div class = 'row'>
                 <div class = 'col-sm-3' style = 'color: orange; font-size: 0.8em; padding-top: 1.2em; text-align: left;'>Date of Purchase</div>
-                <div class = 'col-sm-9'><input id = 'date' class = 'loginTable' type = 'date' placeholder = 'Date of Purchase'></div>
+                <div class = 'col-sm-9'><input id = 'date' class = 'loginTable' type = 'date'></div>
             </div>
             <div class = 'row'>
                 <div class = 'col-sm-3'></div>
                 <div class = 'col-sm-9'><p id = 'dateErr' class = 'loginErr' align = 'left' style = 'padding-top: 0.3em;'><br></p></div>
             </div>
             <div class = 'row'>
-                <input id = 'symbol' class = 'loginTable' type = 'text' placeholder = 'Stock Symbol'>
+                <div class = 'col-sm-3' style = 'color: orange; font-size: 0.8em; padding-bottom: 1.5em; padding-top: 1.2em; text-align: left;'>Stock Symbol</div>
+                <div class = 'col-sm-9' align = 'left'>
+                    <select id = 'stockSymbol' style = 'width: calc(100% - 2em); padding-top: 1em; font-size: 0.8em; color: orange; border: none; border-bottom: 2px solid orange; background-color: transparent; margin-left: 1em;'>
+                        <option value = 'TAAAX'>TAAAX</option>
+                        <option value = 'TMAAX'>TMAAX</option>
+                        <option value = 'THMAX'>THMAX</option>
+                        <option value = 'TCAAX'>TCAAX</option>
+                        <option value = 'TPEAX'>TPEAX</option>
+                        <option value = 'AASMX'>AASMX</option>
+                        <option value = 'AASCX'>AASCX</option>
+                        <option value = 'TWAAX'>TWAAX</option>
+                        <option value = 'AAAGX'>AAAGX</option>
+                        <option value = 'AAUTX'>AAUTX</option>
+                        <option value = 'AALGX'>AALGX</option>
+                        <option value = 'TEIAX'>TEIAX</option>
+                        <option value = 'AABFX'>AABFX</option>
+                        <option value = 'LBHYX'>LBHYX</option>
+                        <option value = 'AAHYX'>AAHYX</option>
+                        <option value = 'AAMBX'>AAMBX</option>
+                        <option value = 'LUBIX'>LUBIX</option>
+                        <option value = 'AAINX'>AAINX</option>
+                        <option value = 'TBFAX'>TBFAX</option>
+                        <option value = 'LBLAX'>LBLAX</option>
+                    </select>
+                </div>
+<!--                <input id = 'symbol' class = 'loginTable' type = 'text' placeholder = 'Stock Symbol'>-->
             </div>
+<!--
             <div class = 'row'>
                 <p id = 'symbolErr' class = 'loginErr' align = 'left' style = 'padding-top: 0.3em;'><br></p>
             </div>
+-->
             <div class = 'row'>
                 <input id = 'price' type = 'number' placeholder = 'Price per Share'>
             </div>

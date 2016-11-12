@@ -43,15 +43,8 @@ $(
                     $('#dateErr').replaceWith('<p id = \'dateErr\' class = \'loginErr\' align = \'left\' style = \'padding-top: 0.3em;\'><br></p>');
                 }
                 
-                // Check if the symbol is empty.
-                var symbol = $('#symbol').val().toUpperCase();
-                if (symbol.length === 0 || symbol === null) {
-                    valid = false;
-                    $('#symbolErr').replaceWith('<p id = \'symbolErr\' class = \'loginErr\' align = \'left\' style = \'padding-top: 0.3em;\'>Stock symbol cannot be empty.</p>');
-                }
-                else {
-                    $('#symbolErr').replaceWith('<p id = \'symbolErr\' class = \'loginErr\' align = \'left\' style = \'padding-top: 0.3em;\'><br></p>');
-                }
+                var e = document.getElementById('stockSymbol');
+                var symbol = e.options[e.selectedIndex].value;
                 
                 // Check if the price is empty.
                 var price = $('#price').val();
@@ -86,7 +79,7 @@ $(
                     $('#addInvestment').hide();
                     $('#next').replaceWith('<button id = \'next\' class = \'button\' style = \'vertical-align: middle; background-color: green;\' onclick = \'next();\'><span>Next</span></button>');
                     $('#date').val('');
-                    $('#symbol').val('');
+//                    $('#stockSymbol').val('');
                     $('#price').val('');
                     $('#shares').val('');
                     

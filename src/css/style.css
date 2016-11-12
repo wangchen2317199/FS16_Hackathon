@@ -145,3 +145,7 @@ body {
     color: darkblue;
     text-align: center;
 }
+
+#stockSymbol:focus {
+    outline: none;
+}
