@@ -33,6 +33,26 @@ $(document).ready(
     }
 );
 
+$(document).ready(  function() {
+  console.log( "window loaded" );
+                var idealInterest = [];
+                var inflation = .04;
+                var monthlyRate = .1;
+                var investment = 3000;
+                var futureValue = 5000;
+                var age = 30;
+                var death = 80;
+
+                for ( i = age; i <= death; i++ ) {
+                futureValue = (futureValue + investment) * (1 + monthlyRate);
+                futureValue = Math.round(futureValue);
+                idealInterest[i] = futureValue;
+                console.log("year = " + i + " amount = " + futureValue);
+                console.log(idealInterest[i]);
+                }
+              
+    });
+
 $(
     function() {
         $('#log_out').click(
