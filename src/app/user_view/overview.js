@@ -34,21 +34,31 @@ $(document).ready(
 );
 
 $(document).ready(  function() {
-  console.log( "window loaded" );
+                console.log( "Lets calc" );
+
+                // Interest rate calculation for idea
                 var idealInterest = [];
+
+                // Percentage rate for what given by customer, inflation, and actual
                 var inflation = .04;
-                var monthlyRate = .1;
+                var initialRate = .1;
+                var actualRate = initialRate - inflation;
+
+                // Expected saving per month
                 var investment = 3000;
+
+                // futureValue starts with what the cutomer currently has in savings
                 var futureValue = 5000;
+
+                // Current age, assume death at 80
                 var age = 30;
                 var death = 80;
 
                 for ( i = age; i <= death; i++ ) {
-                futureValue = (futureValue + investment) * (1 + monthlyRate);
-                futureValue = Math.round(futureValue);
-                idealInterest[i] = futureValue;
-                console.log("year = " + i + " amount = " + futureValue);
-                console.log(idealInterest[i]);
+                    futureValue = (futureValue + investment) * (1 + actualRate);
+                    futureValue = Math.round(futureValue);
+                    idealInterest[i] = futureValue;
+                    console.log("year = " + i + " amount = " + futureValue);
                 }
               
     });
