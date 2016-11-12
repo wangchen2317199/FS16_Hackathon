@@ -3,14 +3,21 @@
     <head>
         <title>Account Overview - The Broker's Investment Planner</title>
       
-<!--        google chart-->
+<!--
+        google chart
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>     
         <script> 
 
             google.charts.load('current', {packages: ['corechart', 'line']});
-          //  google.charts.setOnLoadCallback(drawCurveTypes);
+           google.charts.setOnLoadCallback(drawCurveTypes);
 
         </script>
+-->
+      
+<!--      high chart-->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+      <script src="https://code.highcharts.com/modules/exporting.js"></script>
+      
       
       
         <!-- Bootstrap -->
@@ -61,7 +68,7 @@
                     </div>
                 </div>
                 <div class = 'col-sm-1'></div>
-                <div class = 'col-sm-5' style = 'background-color: pink; border-radius: 2em; border: 2px solid darkred;' id="chart_div">
+                <div class = 'col-sm-5' style = 'background-color: pink; border-radius: 2em; border: 2px solid darkred;' id="container">
 <!--
                     <br><br><br><br><br><br><br><br>
                     Graph goes here.
