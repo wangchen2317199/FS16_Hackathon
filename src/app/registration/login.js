@@ -39,7 +39,7 @@ $(
     function() {
         $('#sign_up').click(
             function() {
-                window.location.href = '/www/registration/registration.html';
+                window.location.href = 'www/registration/registration.html';
             }
         );
     }
