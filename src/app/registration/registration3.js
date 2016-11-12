@@ -34,15 +34,10 @@ $(
                     $('#retireErr').replaceWith('<td id = \'retireErr\' class = \'loginErr\' align = \'left\'><br></td>');
                 }
                 
-                // Check if the interest is empty.
-                var rate = $('#rate').val();
-                if (rate.length === 0 || rate === null) {
-                    valid = false;
-                    $('#rateErr').replaceWith('<td id = \'rateErr\' class = \'loginErr\' align = \'left\'>Interest rate cannot be empty.</td>');
-                }
-                else {
-                    $('#rateErr').replaceWith('<td id = \'rateErr\' class = \'loginErr\' align = \'left\'><br></td>');
-                }
+                // Get the interest rate based on risk tolerance 
+                var e = document.getElementById('rate');
+                var rate = e.options[e.selectedIndex].value;
+                console.log(rate);
                 
                 // Register at MongoDB if everything is OK.
                 if (valid) {
