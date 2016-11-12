@@ -44,21 +44,34 @@ $(document).ready(  function() {
                 var initialRate = .1;
                 var actualRate = initialRate - inflation;
 
-                // Expected saving per month
-                var investment = 3000;
+                // Expected saving per year
+                var investment = 10000;
+                var salary = 50000;
+                var expense = salary - investment;
+                console.log(expense);
+                
 
                 // futureValue starts with what the cutomer currently has in savings
-                var futureValue = 5000;
+                var totalSavings = 50000;
 
                 // Current age, assume death at 80
-                var age = 30;
+                var currentAge = 30;
                 var death = 80;
+                var retirement = 60;
+                console.log(actualRate);
 
-                for ( i = age; i <= death; i++ ) {
-                    futureValue = (futureValue + investment) * (1 + actualRate);
-                    futureValue = Math.round(futureValue);
-                    idealInterest[i] = futureValue;
-                    console.log("year = " + i + " amount = " + futureValue);
+                for ( i = currentAge; i <= retirement; i++ ) {
+                    totalSavings = (totalSavings + investment) * (1 + actualRate);
+                    totalSavings = Math.round(totalSavings);
+                    idealInterest[i] = totalSavings;
+                    console.log("year = " + i + " amount = " + totalSavings);
+                }
+
+                for ( i = retirement + 1; i <= death; i++ ) {
+                    totalSavings = (totalSavings - expense) * (1 + actualRate);
+                    totalSavings = Math.round(totalSavings);
+                    idealInterest[i] = totalSavings;
+                    console.log("second loop year = " + i + " amount = " + totalSavings);
                 }
               
     });
