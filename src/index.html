@@ -2,26 +2,25 @@
 <html>
     <head>
         <title>Home - The Broker's Investment Planner</title>
+        
+        <!-- Bootstrap -->
+        <link rel = 'stylesheet' href = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+        <script src = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+        
         <link rel = 'stylesheet' type = 'text/css' href = 'css/style.css'>
         
         <!-- jQuery Library -->
         <script src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
         
-        <script src = 'app/login.js'></script>
+        <script src = 'app/registration/login.js'></script>
     </head>
     <body>
-        <table class = 'topTable'>
-            <tr>
-                <td><img class = 'mainLogo' src = 'img/Main_Logo_(Cropped).png'></td>
-            </tr>
-        </table>
         <table class = 'login'>
             <tr><td style = 'padding-top: 1em;'>Please sign in your account.</td></tr>
             <tr><td><input id = 'emailAccount' class = 'loginTable' type = 'text' placeholder = 'Email Address'></td></tr>
             <tr><td id = 'emailErr' class = 'loginErr' align = 'left'><br></td></tr>
             <tr><td><input id = 'password' class = 'loginTable' type = 'password' placeholder = 'Password'></td></tr>
             <tr><td id = 'passwordErr' class = 'loginErr' align = 'left'><br></td></tr>
-            <tr><td align = 'left' style = 'padding-left: 0.87em;'><a id = 'forgotPassword' href = '*'>Forgot your password?</a></td></tr>
             <tr>
                 <td>
                     <button id = 'sign_in' class = 'button' style = 'vertical-align: middle; background-color: red;'><span>Sign In</span></button>

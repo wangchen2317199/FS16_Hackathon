@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Desired Goals - The Broker's Investment Planner</title>
+        <link rel = 'stylesheet' type = 'text/css' href = '../../css/style.css'>
+        
+        <!-- Bootstrap -->
+        <link rel = 'stylesheet' href = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+        <script src = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+        
+        <!-- jQuery Library -->
+        <script src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+        
+        <script src = '../../app/registration/registration3.js'></script>
+    </head>
+    <body>
+        <table class = 'login'>
+            <tr><td style = 'padding-top: 1em;'>Desired Goals</td></tr>
+            <tr><td><input id = 'income' class = 'loginTable' type = 'number' placeholder = 'Annual Gross Income (in USD)'></td></tr>
+            <tr><td id = 'incomeErr' class = 'loginErr' align = 'left'><br></td></tr>
+            <tr><td><input id = 'savings' class = 'loginTable' type = 'number' placeholder = 'Annual Savings (in USD)'></td></tr>
+            <tr><td id = 'savingsErr' class = 'loginErr' align = 'left'><br></td></tr>
+            <tr><td><input id = 'retireAge' class = 'loginTable' type = 'number' placeholder = 'Desired Retirement Age'></td></tr>
+            <tr><td id = 'retireErr' class = 'loginErr' align = 'left'><br></td></tr>
+            <tr><td><input id = 'rate' class = 'loginTable' type = 'number' placeholder = 'Desired Annual Interest Rate (in %)'></td></tr>
+            <tr><td id = 'rateErr' class = 'loginErr' align = 'left'><br></td></tr>
+            <tr>
+                <td>
+                    <button id = 'finish' class = 'button' style = 'vertical-align: middle; background-color: red;'><span>Finish!</span></button>
+                    <button id = 'back_to_home' class = 'button' style = 'vertical-align: middle; background-color: green;'><span>Home Page</span></button>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add Investment History - The Broker's Investment Planner</title>
+        
+        <!-- Bootstrap -->
+        <link rel = 'stylesheet' href = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+        
+        <link rel = 'stylesheet' type = 'text/css' href = '../../css/style.css'>
+        
+        <!-- jQuery Library -->
+        <script src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+        
+        <!-- Bootstrap Library -->
+        <script src = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+        
+        <script src = '../../app/registration/registration2.js'></script>
+    </head>
+    <body>
+        <div id = 'investmentHistory' class = container>
+            <div class = 'row' style = 'padding-top: 1em; padding-bottom: 1em;'>
+                Add Investment History
+            </div>
+            <div class = 'row' style = 'padding-bottom: 1em; text-align: center; color: red; font-size: 1em;'>
+                <u>Investment History</u>
+            </div>
+            <div class = 'row' style = 'color: red;'>
+                <div class = 'col-sm-3'>Purchase Date</div>
+                <div class = 'col-sm-3'>Symbol</div>
+                <div class = 'col-sm-3'>Unit Price</div>
+                <div class = 'col-sm-3'>Shares</div>
+            </div>
+            <div id = 'investments'></div>
+            <div class = 'row'>
+                <button id = 'add_investment' class = 'button' style = 'width: 10em; vertical-align: middle; background-color: red;'><span>Add Investment</span></button>
+                <button id = 'next' class = 'button' style = 'vertical-align: middle; background-color: green;' onclick = 'next();'><span>Next</span></button>
+            </div>
+        </div>
+        
+        <div id = 'addInvestment' class = 'container'>
+            <div class = 'row' style = 'padding-top: 1em; padding-bottom: 1em;'>
+                New Investment
+            </div>
+            <div class = 'row'>
+                <div class = 'col-sm-3' style = 'color: orange; font-size: 0.8em; padding-top: 1.2em; text-align: left;'>Date of Purchase</div>
+                <div class = 'col-sm-9'><input id = 'date' class = 'loginTable' type = 'date' placeholder = 'Date of Purchase'></div>
+            </div>
+            <div class = 'row'>
+                <div class = 'col-sm-3'></div>
+                <div class = 'col-sm-9'><p id = 'dateErr' class = 'loginErr' align = 'left' style = 'padding-top: 0.3em;'><br></p></div>
+            </div>
+            <div class = 'row'>
+                <input id = 'symbol' class = 'loginTable' type = 'text' placeholder = 'Stock Symbol'>
+            </div>
+            <div class = 'row'>
+                <p id = 'symbolErr' class = 'loginErr' align = 'left' style = 'padding-top: 0.3em;'><br></p>
+            </div>
+            <div class = 'row'>
+                <input id = 'price' type = 'number' placeholder = 'Price per Share'>
+            </div>
+            <div class = 'row'>
+                <p id = 'priceErr' class = 'loginErr' align = 'left' style = 'padding-top: 0.3em;'><br></p>
+            </div>
+            <div class = 'row'>
+                <input id = 'shares' class = 'loginTable' type = 'number' placeholder = 'Shares'>
+            </div>
+            <div class = 'row'>
+                <p id = 'sharesErr' class = 'loginErr' align = 'left' style = 'padding-top: 0.3em;'><br></p>
+            </div>
+            <div class = 'row'>
+                <button id = 'Add' class = 'button' style = 'vertical-align: middle; background-color: red;'><span>Add</span></button>
+                <button id = 'Cancel' class = 'button' style = 'vertical-align: middle; background-color: green;'><span>Cancel</span></button>
+            </div>
+        </div>
+    </body>
+</html>
