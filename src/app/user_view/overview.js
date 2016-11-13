@@ -1,3 +1,12 @@
+var redOrGreen = function(s) {
+    if (s >= 0) {
+        return 'green';
+    }
+    else {
+        return 'red';
+    }
+}
+
 $(document).ready(
     function() {
         sessionStorage.setItem('interest', '');
@@ -14,79 +23,115 @@ $(document).ready(
                     var retire_age = result['retire_age'];
                     var desired_interest = result['desired_interest'];
                     var investments= result['investments'];
-                  console.log(investments);
                     var oldsum=0;
                     var newsum=0;
                   
-//caculate the old sum of the user                  
-                  var symbols = '';
-                  investments.forEach(
-                    function(object) {
-                      symbols += ',' + object.symbol;
-                      oldsum += parseInt(object.shares) * parseFloat(object.price.replace('$',''));
-                        
-                    }
-                  );               
-                  symbols = symbols.substr(1);
-                  
- //caculate the new sum of the user                 
-                  $.ajax(
-                    {
-                      url: 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22' +
-                      symbols + 
-                      '%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=',
-                      method: 'GET',
-                      success: function(result) {
-                        var quotes = result.query.results.quote;
-                        quotes.forEach(
-                          function(object) {
-                            var currentStock = object.symbol.toUpperCase();
-                            var currentShares = 0;
-                            investments.forEach(
-                              function(object) {
-                                  currentShares += parseInt(object.shares);
+                    // Caculate the old sum of the user.
+                    var investmentsBySymbol = [];
+                    var symbols = '';
+                    investments.forEach(
+                        function(object) {
+                            symbols += ',' + object.symbol;
+                            oldsum += parseInt(object.shares) * parseFloat(object.price.replace('$',''));
+                            var noDuplicate = true;
+                            for (var k = 0; k < investmentsBySymbol.length; k++) {
+                                if (investmentsBySymbol[k].symbol === object.symbol) {
+                                    investmentsBySymbol[k].totalPrice += parseFloat(object.price) * parseInt(object.shares);
+                                    noDuplicate = false;
                                 }
-                            );
-                            
-                            newsum += parseFloat(object.LastTradePriceOnly) * currentShares;
-                              
-                          }
-                        );
-                          
-                          investments.forEach(
-                              function(object) {
-                                  
-                                  $('#s_details').append(
-                                      '<div class = \'row\' id = \'' + object.symbol + '\'>' +
-                                      '<div class = \'col-sm-3\'>' + object.date + '</div>' +
-                                      '<div class = \'col-sm-2\'>' + object.symbol + '</div>' +
-                                      '<div class = \'col-sm-2\' style = \'color: red;\'>' + object.price + '</div>' +
-                                      '<div class = \'col-sm-2\'>' + object.shares + '</div>' +
-                                      '</div>'
-                                  );
-                                  quotes.forEach(
-                                      function(obj2) {
-                                          if(obj2.symbol.toUpperCase() === object.symbol) {
-                                              $('#' + obj2.symbol.toUpperCase()).append(
-                                                  '<div class = \'col-sm-3\' style = \'color:red;\'><strong>' +
-                                                  '$' + obj2.LastTradePriceOnly +
-                                                  '</strong></div>'
-                                              );
-                                          }
-                                      }
-                                  );
-                              }
-                          );
-                        
-//                        alert(oldsum);
-//                        alert(newsum);
-                        
-//caculate the actual interest
-                        var interest = (newsum - oldsum) / oldsum;
-                        sessionStorage.setItem('interest', interest);
-                      }
-                    }
-                  );
+                            }
+                            if (noDuplicate) {
+                                investmentsBySymbol.push(
+                                    {
+                                        symbol: object.symbol,
+                                        totalPrice: parseFloat(object.price.replace('$','')) * parseInt(object.shares),
+                                        shares: object.shares,
+                                        currentValuePerShare: ''
+                                    }
+                                );
+                            }
+                        }
+                    );
+                    symbols = symbols.substr(1);
+                    // Caculate the new sum of the user.
+                    $.ajax(
+                        {
+                            url: 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22' +
+                            symbols + 
+                            '%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=',
+                            method: 'GET',
+                            success: function(result) {
+                                var quotes = result.query.results.quote;
+                                quotes.forEach(
+                                    function(object) {
+                                        var currentStock = object.symbol.toUpperCase();
+                                        var currentShares = 0;
+                                        investments.forEach(
+                                            function(object) {
+                                                currentShares += parseInt(object.shares);
+                                            }
+                                        );
+                                        newsum += parseFloat(object.LastTradePriceOnly) * currentShares;
+
+                                        investmentsBySymbol.forEach(
+                                            function(obj) {
+                                                if (obj.symbol === object.symbol.toUpperCase()) {
+                                                    obj.currentValuePerShare = object.LastTradePriceOnly;
+                                                }
+                                            }
+                                        );
+                                    }
+                                );
+                                investmentsBySymbol.forEach(
+                                    function(obj2) {
+                                        var currentValue = parseFloat(obj2.currentValuePerShare) * parseInt(obj2.shares);
+                                        var dollarProfit = currentValue - parseFloat(obj2.totalPrice);
+                                        var percentProfit = dollarProfit / parseFloat(obj2.totalPrice);
+                                        var valueAfterFiveYears = currentValue * Math.pow(1 + percentProfit, 5);
+                                        $('#s_details').append(
+                                            '<div class = \'row\'>' +
+                                            '<div class = \'col-sm-2\' align = \'center\'>' + obj2.symbol + '</div>' +
+                                            '<div class = \'col-sm-2\' align = \'center\'>$' + obj2.totalPrice + '</div>' +
+                                            '<div class = \'col-sm-2\' align = \'center\' style = \'color: black;\'>$' + currentValue + '</div>' +
+                                            '<div class = \'col-sm-2\' align = \'center\' style = \'color: ' + redOrGreen(dollarProfit) + ';\'>$' + dollarProfit.toFixed(2) + '</div>' +
+                                            '<div class = \'col-sm-2\' align = \'center\' style = \'color: ' + redOrGreen(dollarProfit) + ';\'><strong>' + (percentProfit * 100).toFixed(2) + '%</strong></div>' +
+                                            '<div class = \'col-sm-2\' align = \'center\' style = \'color: blue;\'><strong>$' + valueAfterFiveYears.toFixed(2) + '</strong></div>' +
+                                            '</div>'
+                                        );
+                                    }
+                                );
+    //                            investments.forEach(
+    //                              function(object) {
+    //                                  
+    //                                  
+    //                                  $('#s_details').append(
+    //                                      '<div class = \'row\' id = \'' + object.symbol + '\'>' +
+    //                                      '<div class = \'col-sm-2\'>' + object.symbol + '</div>' +
+    //                                      '<div class = \'col-sm-2\'>' + object.symbol + '</div>' +
+    //                                      '<div class = \'col-sm-2\' style = \'color: red;\'>' + object.price + '</div>' +
+    //                                      '<div class = \'col-sm-2\'>' + object.shares + '</div>' +
+    //                                      '</div>'
+    //                                  );
+    //                                  quotes.forEach(
+    //                                      function(obj2) {
+    //                                          if(obj2.symbol.toUpperCase() === object.symbol) {
+    //                                              $('#' + obj2.symbol.toUpperCase()).append(
+    //                                                  '<div class = \'col-sm-3\' style = \'color:red;\'><strong>' +
+    //                                                  '$' + obj2.LastTradePriceOnly +
+    //                                                  '</strong></div>'
+    //                                              );
+    //                                          }
+    //                                      }
+    //                                  );
+    //                              }
+    //                          );
+
+    //caculate the actual interest
+                                var interest = (newsum - oldsum) / oldsum;
+                                sessionStorage.setItem('interest', interest);
+                            }
+                        }
+                    );
                     $('#welcome').replaceWith('<div id = \'welcome\' class = \'row\' style = \'padding-bottom: 1em;\'>Welcome ' + name + '!</div>');
                     $('#tableCellDOB').replaceWith('<div class = \'col-sm-6\' id = \'tableCellDOB\'>' + DOB + '</div>');
                     $('#tableCellIncome').replaceWith('<div class = \'col-sm-6\' id = \'tableCellIncome\'>$' + income + '</div>');
