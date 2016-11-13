@@ -188,7 +188,7 @@ function getP() {
                 }
             },
             error: function(error) {
-                alert('Error!  Cannot get the price!');
+                alert('Error!  There was no trade on the date you picked!');
             }
         }
     );
