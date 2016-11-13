@@ -22,6 +22,52 @@ $(document).ready(
                     $('#retireAgeCell').css('color', 'red');
                     $('#rateCell').replaceWith('<div class = \'col-sm-6\' id = \'rateCell\'>' + desired_interest + '%</div>');
                     $('#rateCell').css('color', 'red');
+                    console.log(desired_interest);
+
+                    // Show suggested funds in regards to the risk tolerance (desired_interest rate)
+                    if(desired_interest > 14)
+                    {
+                        $('#suggested_stocks').replaceWith('<div class = \'col-md-12\' id = \'suggested_stocks\'>' + 
+                        '<a href="https://www.thriventfunds.com/mutual-funds/asset-allocation/aggressive-allocation-fund/class-s.html">Aggressive Allocation(TAAAX)</a>' + '<br>'
+                        + '<a href=https://www.thriventfunds.com/mutual-funds/income-plus/growth-and-income-plus-fund/class-s.html">Thrivent Growth and Income Plus Fund(TEIIX)</a>' + '<br><br><br><br>'
+
+                         + '</div>');
+                        $('#suggested_stocks').css('color', 'red');
+                         $('#suggested_class').replaceWith('Aggressive');
+                        $('#suggested_class').css('color', 'red');
+                       
+                    }
+
+                    else if( 5 < desired_interest && desired_interest <= 14)
+                    {
+                         $('#suggested_stocks').replaceWith('<div class = \'col-md-12\' id = \'suggested_stocks\'>' + 
+                            '<a href="https://www.thriventfunds.com/mutual-funds/income-plus/balanced-income-plus-fund/class-s.html">Balanced Income Plus(AABFX)</a>' + '<br>'
+                         + '<a href="https://www.thriventfunds.com/mutual-funds/asset-allocation/moderate-allocation-fund/class-s.html">Thrivent Moderate Allocation Fund(TMAIX)</a>' + '<br><br><br><br>'
+
+                         + '</div>');
+                        $('#suggested_stocks').css('color', 'red');
+                         $('#suggested_stocks').css('color', 'red');
+                          $('#suggested_class').replaceWith('<div class = \'col-md-12\' id = \'suggested_class\'>' + 'Medium Risk' +  
+                             '</div>');
+                        $('#suggested_class').css('color', 'chocolate');
+                    }
+
+                    else
+                    {
+                         
+                         $('#suggested_stocks').replaceWith('<div class = \'col-md-12\' id = \'suggested_stocks\'>' + 
+                           '<a href="https://www.thriventfunds.com/mutual-funds/fixed-income/government-bond-fund/class-s.html">Government Bond(TBFAX)</a>' + '<br>'
+                        + '<a href="https://www.thriventfunds.com/mutual-funds/fixed-income/limited-maturity-bond-fund/class-s.html">Thrivent Limited Maturity Bond Fund</a>' + '<br><br><br><br>'
+                         + '</div>');
+                        $('#suggested_stocks').css('color', 'red');
+                        $('#suggested_stocks').css('color', 'red');
+                          $('#suggested_class').replaceWith('<div class = \'col-md-12\' id = \'suggested_class\'>' + 'Low Risk' +  
+                             '</div>');
+                        $('#suggested_class').css('color', 'blue');
+                       
+                    }
+                    
+                  
                   
                    //if success show the graph
                   
@@ -154,7 +200,7 @@ $(document).ready(
                     totalSavings = (totalSavings + savings) * (1 + actualRate);
                     totalSavings = Math.round(totalSavings);
             
-                    console.log("year = " + i + " amount = " + totalSavings);
+                 //   console.log("year = " + i + " amount = " + totalSavings);
                     console.log(savings);
                      
                       idealinterest.push(totalSavings);
@@ -165,7 +211,7 @@ $(document).ready(
                     totalSavings = (totalSavings - expense) * (1 + actualRate);
                     totalSavings = Math.round(totalSavings);
                 //  idealInterest[i] = totalSavings;
-                    console.log("second loop year = " + i + " amount = " + totalSavings);
+                  //  console.log("second loop year = " + i + " amount = " + totalSavings);
             
                   idealinterest.push(totalSavings);
                 }

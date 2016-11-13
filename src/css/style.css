@@ -111,7 +111,7 @@ body {
     text-align: center;
 }
 
-#welcome, #welcome2 {
+#welcome, #welcome2, #welcome3 {
     font-family: 'Trebuchet MS';
     font-size: 1.2em;
     color: darkred;
@@ -119,7 +119,7 @@ body {
     text-decoration: underline;
 }
 
-#tableCell1, #tableCellDOB, #tableCell2, #tableCellIncome, #tableCell3, #retireAgeCell, #savingsCell, #tableCell4, #tableCell6, #rateCell, #stock_details {
+#tableCell1, #tableCellDOB, #tableCell2, #tableCellIncome, #tableCell3, #retireAgeCell, #savingsCell, #tableCell4, #tableCell6, #rateCell, #stock_details, #suggested_stocks, #suggested_class {
     font-family: 'Trebuchet MS';
     font-size: 1.2em;
     color: darkblue;
