@@ -12,6 +12,55 @@ $(document).ready(
                     var savings = result['savings'];
                     var retire_age = result['retire_age'];
                     var desired_interest = result['desired_interest'];
+                    var investments= result['investments'];
+                  console.log(investments);
+                    var oldsum=0;
+                    var newsum=0;
+                  
+//caculate the old sum of the user                  
+                  var symbols = '';
+                  investments.forEach(
+                    function(object) {
+                      symbols += ',' + object.symbol;
+                      oldsum += parseInt(object.shares) * parseFloat(object.price.replace('$',''));
+                    }
+                  );               
+                  symbols = symbols.substr(1);
+                  
+ //caculate the new sum of the user                 
+                  $.ajax(
+                    {
+                      url: 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22' +
+                      symbols + 
+                      '%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=',
+                      method: 'GET',
+                      success: function(result) {
+                        var quotes = result.query.results.quote;
+                        quotes.forEach(
+                          function(object) {
+                            var currentStock = object.symbol.toUpperCase();
+                            var currentShares = 0;
+                            investments.forEach(
+                              function(object) {
+                                if (currentStock === object.symbol) {
+                                  currentShares += parseInt(object.shares);
+                                }
+                              }
+                            );
+                            
+                            newsum += parseFloat(object.LastTradePriceOnly) * currentShares;
+                          }
+                        );
+                        
+//                        alert(oldsum);
+//                        alert(newsum);
+                        
+//caculate the actual interest
+                        var interest = (newsum - oldsum) / oldsum;
+                        localStorage.setItem('interest', interest);
+                      }
+                    }
+                  );
                     $('#welcome').replaceWith('<div id = \'welcome\' class = \'row\' style = \'padding-bottom: 1em;\'>Welcome ' + name + '!</div>');
                     $('#tableCellDOB').replaceWith('<div class = \'col-sm-6\' id = \'tableCellDOB\'>' + DOB + '</div>');
                     $('#tableCellIncome').replaceWith('<div class = \'col-sm-6\' id = \'tableCellIncome\'>$' + income + '</div>');
@@ -22,9 +71,11 @@ $(document).ready(
                     $('#retireAgeCell').css('color', 'red');
                     $('#rateCell').replaceWith('<div class = \'col-sm-6\' id = \'rateCell\'>' + desired_interest + '%</div>');
                     $('#rateCell').css('color', 'red');
-                    console.log(desired_interest);
-
-                    // Show suggested funds in regards to the risk tolerance (desired_interest rate)
+                  
+                  
+                  
+                  
+                   // Show suggested funds in regards to the risk tolerance (desired_interest rate)
                     if(desired_interest > 14)
                     {
                         $('#suggested_stocks').replaceWith('<div class = \'col-md-12\' id = \'suggested_stocks\'>' + 
@@ -66,13 +117,10 @@ $(document).ready(
                         $('#suggested_class').css('color', 'blue');
                        
                     }
-                    
-                  
                   
                    //if success show the graph
                   
-
-           // GOOGLE CHART
+                   //      GOOGLE CHART
 //--------------------------------------------------------------------------------------------------------------------
                     
 //                  var data = new google.visualization.DataTable();
@@ -179,31 +227,32 @@ $(document).ready(
                    var retire_age = parseFloat(retire_age);
                    var desired_interest = parseFloat(desired_interest);
                
-                   var totalSavings = 0;
+                   var totalSavings = 0;   //with idealinterest
+                   var realSaving = 0;      //with realinterest
                    var inflation = .04;
                    var death = 80;
                    var expense = income - savings;
                   
                    var actualRate =(desired_interest/ 100.0)  - inflation ;  
+                   var realinterest=   localStorage.getItem('interest');
                   
-                  
-                    var agearray = [];
-                  for (i = currentAge; i <= 80; i++ ){
+                   var agearray = [];
+                   for (i = currentAge; i <= 80; i++ ){
                     
                     agearray.push(i);
                     
                   }
                   
-                  
-                   var idealinterest = [];
-                   for ( i = currentAge; i <= retire_age; i++ ) {
+//---------------------------idealinterest--------------------------------------------
+                    var idealinterest = [];
+                    for ( i = currentAge; i <= retire_age; i++ ) {
                     totalSavings = (totalSavings + savings) * (1 + actualRate);
                     totalSavings = Math.round(totalSavings);
-            
-                 //   console.log("year = " + i + " amount = " + totalSavings);
+                    
+                    console.log("year = " + i + " amount = " + totalSavings);
                     console.log(savings);
                      
-                      idealinterest.push(totalSavings);
+                    idealinterest.push(totalSavings);
             
                 }
 
@@ -211,14 +260,39 @@ $(document).ready(
                     totalSavings = (totalSavings - expense) * (1 + actualRate);
                     totalSavings = Math.round(totalSavings);
                 //  idealInterest[i] = totalSavings;
-                  //  console.log("second loop year = " + i + " amount = " + totalSavings);
+                    console.log("second loop year = " + i + " amount = " + totalSavings);
             
                   idealinterest.push(totalSavings);
                 }
                    console.log(idealinterest);
                  console.log(agearray);
                   
+//---------------------------actualinterest--------------------------------------------     
+                  var  actualinterest = [];
                   
+                  for ( i = currentAge; i <= retire_age; i++ ) {
+                    realSaving = (realSaving + savings) * (1 + realinterest);//with actualinterest
+                    realSaving = Math.round(realSaving);
+            
+                    console.log("1.real year = " + i + " amount = " + realSaving);
+                  //  console.log(savings);
+                     
+                      actualinterest.push(realSaving);
+            
+                }
+
+                for ( i = retire_age + 1; i <= death; i++ ) {
+                    realSaving = (realSaving - expense) * (1 + realinterest);//with actualinterest
+                    realSaving = Math.round(realSaving);
+                //  idealInterest[i] = totalSavings;
+                    console.log("2.real year = " + i + " amount = " + realSaving);
+            
+                  actualinterest.push(realSaving);
+                }
+                  
+                  
+                  
+//---------loadchart---------     
            Highcharts.chart('container', {
              chart: {
       backgroundColor: null,
@@ -227,21 +301,14 @@ $(document).ready(
       }
    },
         title: {
-            text: 'Monthly Average Temperature',
+            text: 'Total saving Chart',
             x: -20 //center
-        },
-        subtitle: {
-            text: 'Source: WorldClimate.com',
-            x: -20
-        },
+        },    
         xAxis: {
           title: {
                 text: 'Age'
             },
-            categories: agearray
-//          ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-//                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        },
+            categories: agearray },
         yAxis: {
             title: {
                 text: 'Total Saving'
@@ -252,16 +319,16 @@ $(document).ready(
                 color: '#808080'
             }]
         },
-          plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: false
-            }
-        },
+//          plotOptions: {
+//            line: {
+//                dataLabels: {
+//                    enabled: true
+//                },
+//                enableMouseTracking: false
+//            }
+//        },
         tooltip: {
-            valueSuffix: '°C'
+            valuePrefix: '$'
         },
         legend: {
             layout: 'vertical',
@@ -271,19 +338,44 @@ $(document).ready(
         },
         series: [{
             name: 'saving with idealinterest',
-            data: idealinterest},
-           {
-            name: 'New York',
-            data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+            data: idealinterest
         }
-        ]
-    });       
+//                 ,{
+//                type: 'flags',
+//                data: [{
+//                    x: currentAge,
+//                    title: 'Current Year',
+//                    text: 'Shape: "circlepin"'
+//                }]
+//        }
+                 ,
+                 
+                 
+                 
+                 
+                 
+           {
+            name: 'saving with actualinterest',
+            data: actualinterest
+           }
+                 
+//                 ,{
+//                type: 'flags',
+//                data: [{
+//                    x: currentAge,
+//                    title: 'Current Year',
+//                    text: 'Shape: "circlepin"'
+//                }
+                    ]
+                   
+            }
+         
                   
                   
                   
-                  
+           );
 //--------------------------------------------------------------------------------------------------------------------
-                     },
+                     },//end of success
                 error: function(error) {
                     alert('Error!  Cannot get information!');
                     localStorage.setItem('logged_in', false);
