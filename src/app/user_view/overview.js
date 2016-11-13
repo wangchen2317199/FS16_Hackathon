@@ -1,5 +1,6 @@
 $(document).ready(
     function() {
+        sessionStorage.setItem('interest', '');
         var email = localStorage.getItem('current_email');
         $.ajax(
             {
@@ -23,6 +24,7 @@ $(document).ready(
                     function(object) {
                       symbols += ',' + object.symbol;
                       oldsum += parseInt(object.shares) * parseFloat(object.price.replace('$',''));
+                        
                     }
                   );               
                   symbols = symbols.substr(1);
@@ -42,22 +44,46 @@ $(document).ready(
                             var currentShares = 0;
                             investments.forEach(
                               function(object) {
-                                if (currentStock === object.symbol) {
                                   currentShares += parseInt(object.shares);
                                 }
-                              }
                             );
                             
                             newsum += parseFloat(object.LastTradePriceOnly) * currentShares;
+                              
                           }
                         );
+                          
+                          investments.forEach(
+                              function(object) {
+                                  
+                                  $('#s_details').append(
+                                      '<div class = \'row\' id = \'' + object.symbol + '\'>' +
+                                      '<div class = \'col-sm-3\'>' + object.date + '</div>' +
+                                      '<div class = \'col-sm-2\'>' + object.symbol + '</div>' +
+                                      '<div class = \'col-sm-2\' style = \'color: red;\'>' + object.price + '</div>' +
+                                      '<div class = \'col-sm-2\'>' + object.shares + '</div>' +
+                                      '</div>'
+                                  );
+                                  quotes.forEach(
+                                      function(obj2) {
+                                          if(obj2.symbol.toUpperCase() === object.symbol) {
+                                              $('#' + obj2.symbol.toUpperCase()).append(
+                                                  '<div class = \'col-sm-3\' style = \'color:red;\'><strong>' +
+                                                  '$' + obj2.LastTradePriceOnly +
+                                                  '</strong></div>'
+                                              );
+                                          }
+                                      }
+                                  );
+                              }
+                          );
                         
 //                        alert(oldsum);
 //                        alert(newsum);
                         
 //caculate the actual interest
                         var interest = (newsum - oldsum) / oldsum;
-                        localStorage.setItem('interest', interest);
+                        sessionStorage.setItem('interest', interest);
                       }
                     }
                   );
@@ -234,7 +260,7 @@ $(document).ready(
                    var expense = income - savings;
                   
                    var actualRate =(desired_interest/ 100.0)  - inflation ;  
-                   var realinterest=   localStorage.getItem('interest');
+                   var realinterest=   sessionStorage.getItem('interest');
                   
                    var agearray = [];
                    for (i = currentAge; i <= 80; i++ ){
