@@ -38,12 +38,16 @@ $(document).ready(
                             for (var k = 0; k < investmentsBySymbol.length; k++) {
                                 if (investmentsBySymbol[k].symbol === object.symbol) {
                                     investmentsBySymbol[k].totalPrice += parseFloat(object.price.replace('$','')) * parseInt(object.shares);
+                                    if (investmentsBySymbol[k].date > Date.parse(object.date)) {
+                                        investmentsBySymbol[k].date = Date.parse(object.date);
+                                    }
                                     noDuplicate = false;
                                 }
                             }
                             if (noDuplicate) {
                                 investmentsBySymbol.push(
                                     {
+                                        date: Date.parse(object.date),
                                         symbol: object.symbol,
                                         totalPrice: parseFloat(object.price.replace('$','')) * parseInt(object.shares),
                                         shares: object.shares,
@@ -87,7 +91,7 @@ $(document).ready(
                                     function(obj2) {
                                         var currentValue = parseFloat(obj2.currentValuePerShare) * parseInt(obj2.shares);
                                         var dollarProfit = currentValue - parseFloat(obj2.totalPrice);
-                                        var percentProfit = dollarProfit / parseFloat(obj2.totalPrice);
+                                        var percentProfit = dollarProfit / parseFloat(obj2.totalPrice) / ((Date.parse(new Date()) - obj2.date) / (1000 * 3600 * 24 * 365));
                                         var valueAfterFiveYears = currentValue * Math.pow(1 + percentProfit, 5);
                                         var negativePercentProfit = 0 - percentProfit;
                                         var valueAfterLoss = currentValue * Math.pow(1 + negativePercentProfit, 5);

@@ -182,7 +182,7 @@ function getP() {
                     finalPrice = closePrice['quote']['Close'];
                     $('#autoPrice').replaceWith(
                         '<div id = \'autoPrice\' class = \'row\'><button class = \'d\' style = \'margin-bottom: 0.1em;\' onclick = \'getP();\'>GetPrice</button><a id = \'price\'>' +
-                        '  $' + finalPrice + '</a></div>'
+                        '  $' + parseFloat(finalPrice).toFixed(2) + '</a></div>'
                     );
                     $('#autoPrice').val(finalPrice);
                 }
