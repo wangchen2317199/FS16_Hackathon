@@ -11,6 +11,7 @@ $(document).ready(
     function() {
         sessionStorage.setItem('interest', '');
         var email = localStorage.getItem('current_email');
+        var earliestDate = Date.parse(new Date());
         $.ajax(
             {
                 url: "https://api.mlab.com/api/1/databases/pm/collections/ip_users/" + email + "?apiKey=mwDHQOuAdZdk7Jj6kN7LUtt77QBcqfUC",
@@ -31,14 +32,13 @@ $(document).ready(
                     var symbols = '';
                     investments.forEach(
                         function(object) {
-                            console.log(object.index);
                             symbols += ',' + object.symbol;
                             oldsum += parseInt(object.shares) * parseFloat(object.price.replace('$',''));
                             var noDuplicate = true;
                             for (var k = 0; k < investmentsBySymbol.length; k++) {
                                 if (investmentsBySymbol[k].symbol === object.symbol) {
                                     investmentsBySymbol[k].totalPrice += parseFloat(object.price.replace('$','')) * parseInt(object.shares);
-                                    if (investmentsBySymbol[k].date > Date.parse(object.date)) {
+                                    if (Date.parse(investmentsBySymbol[k].date) > Date.parse(object.date)) {
                                         investmentsBySymbol[k].date = Date.parse(object.date);
                                     }
                                     noDuplicate = false;
@@ -54,9 +54,11 @@ $(document).ready(
                                         currentValuePerShare: ''
                                     }
                                 );
+                                
                             }
                         }
                     );
+                    
                     symbols = symbols.substr(1);
                     // Caculate the new sum of the user.
                     $.ajax(
@@ -67,26 +69,34 @@ $(document).ready(
                             method: 'GET',
                             success: function(result) {
                                 var quotes = result.query.results.quote;
-                                quotes.forEach(
-                                    function(object) {
-                                        var currentStock = object.symbol.toUpperCase();
-                                        var currentShares = 0;
-                                        investments.forEach(
-                                            function(object) {
-                                                currentShares += parseInt(object.shares);
-                                            }
-                                        );
-                                        newsum += parseFloat(object.LastTradePriceOnly) * currentShares;
-
-                                        investmentsBySymbol.forEach(
-                                            function(obj) {
-                                                if (obj.symbol === object.symbol.toUpperCase()) {
-                                                    obj.currentValuePerShare = object.LastTradePriceOnly;
+                                if (investmentsBySymbol.length === 1) {
+                                    investmentsBySymbol[0].currentValuePerShare = quotes.LastTradePriceOnly;
+                                    newsum += parseFloat(quotes.LastTradePriceOnly) * parseInt(investmentsBySymbol[0].shares);
+                                }
+                                else {
+                                    quotes.forEach(
+                                        function(object) {
+                                            var currentStock = object.symbol.toUpperCase();
+                                            var currentShares = 0;
+                                            investments.forEach(
+                                                function(object3) {
+                                                    if (object3.symbol === currentStock) {
+                                                        currentShares += parseInt(object3.shares);
+                                                    }
                                                 }
-                                            }
-                                        );
-                                    }
-                                );
+                                            );
+                                            newsum += parseFloat(object.LastTradePriceOnly) * currentShares;
+
+                                            investmentsBySymbol.forEach(
+                                                function(obj) {
+                                                    if (obj.symbol === object.symbol.toUpperCase()) {
+                                                        obj.currentValuePerShare = object.LastTradePriceOnly;
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    );
+                                }
                                 investmentsBySymbol.forEach(
                                     function(obj2) {
                                         var currentValue = parseFloat(obj2.currentValuePerShare) * parseInt(obj2.shares);
@@ -95,6 +105,9 @@ $(document).ready(
                                         var valueAfterFiveYears = currentValue * Math.pow(1 + percentProfit, 5);
                                         var negativePercentProfit = 0 - percentProfit;
                                         var valueAfterLoss = currentValue * Math.pow(1 + negativePercentProfit, 5);
+                                        if (earliestDate > obj2.date) {
+                                            earliestDate = obj2.date;
+                                        }
                                         $('#s_details').append(
                                             '<div class = \'row\'>' +
                                             '<div class = \'col-sm-1\' align = \'center\'>' + obj2.symbol + '</div>' +
@@ -110,20 +123,144 @@ $(document).ready(
                                 );
                                 
                                 // Caculate the actual interest.
-                                var interest = (newsum - oldsum) / oldsum;
+                                var interest = (newsum - oldsum) / oldsum / ((Date.parse(new Date()) - earliestDate) / (1000 * 3600 * 24 * 365));
                                 sessionStorage.setItem('interest', interest);
+                                
+                                            //         high chart         
+            //--------------------------------------------------------------------------------------------------------------------
+                                var d = new Date();
+                                d  = Date.parse(d);
+                                var D = Date.parse(DOB);
+                                var age = d - D;
+                                sessionStorage.setItem('age', age);
+                                var minutes = 1000 * 60;
+                                var hours = minutes * 60;
+                                var days = hours * 24;
+                                var years = days * 365;
+                                var currentAge = Math.round(age / years);
+                                income = parseFloat(income);
+                                savings = parseFloat(savings);
+                                retire_age = parseInt(retire_age);
+                                sessionStorage.setItem('retire_age', retire_age);
+                                desired_interest = parseFloat(desired_interest);
+                                var totalSavings = newsum;   //with idealinterest
+                                var realSaving = newsum;      //with realinterest
+                                var inflation = .04;
+                                var death = 80;
+                                var expense = income - savings;
+                                var actualRate = (desired_interest / 100.0) - inflation;  
+                                var realinterest = parseFloat(sessionStorage.getItem('interest')) - inflation;
+                                var agearray = [];
+                                for (var i = currentAge; i <= 80; i++){
+                                    agearray.push(i);
+                                }
+
+            //---------------------------idealinterest--------------------------------------------
+                                var idealinterest = [];
+                                for (var i = currentAge; i <= retire_age; i++) {
+                                    totalSavings = (totalSavings + savings) * (1 + actualRate);
+                                    totalSavings = Math.round(totalSavings);
+                                    idealinterest.push(totalSavings);
+                                }
+                                console.log(idealinterest);
+                                for (var i = retire_age + 1; i <= death; i++) {
+                                    totalSavings = (totalSavings - expense) * (1 + actualRate);
+                                    totalSavings = Math.round(totalSavings);
+                                    idealinterest.push(totalSavings);
+                                }
+                                console.log(idealinterest);
+
+            //---------------------------actualinterest--------------------------------------------     
+                                var  actualinterest = [];
+                                for (var i = currentAge; i <= retire_age; i++) {
+                                    realSaving = (realSaving + savings) * (1 + realinterest);//with actualinterest
+                                    realSaving = Math.round(realSaving);
+                                    actualinterest.push(realSaving);
+                                }
+                                console.log(actualinterest);
+                                for (var i = retire_age + 1; i <= death; i++) {
+                                    realSaving = (realSaving - expense) * (1 + realinterest);//with actualinterest
+                                    realSaving = Math.round(realSaving);
+                                    actualinterest.push(realSaving);
+                                }
+                                console.log(actualinterest);
+
+            //---------loadchart---------     
+                                Highcharts.chart(
+                                    'container',
+                                    {
+                                        chart: {
+                                            backgroundColor: null,
+                                            style: {
+                                                fontFamily: 'Trebuchet MS'
+                                            }
+                                        },
+                                        title: {
+                                            style: {
+                                                color: 'red',
+                                            },
+                                            text: 'Total saving Chart',
+                                            x: -20 //center
+                                        },    
+                                        xAxis: {
+                                            className: 'x',
+                                            title: {
+                                                text: 'Age'
+                                            },
+                                            categories: agearray
+                                        },
+                                        yAxis: {
+                                            gridLineColor: 'green',
+                                            gridLineDashStyle: 'longdash',
+                                            gridLineWidth: 0.5,
+                                            className: 'y',
+                                            title: {
+                                                text: 'Total Saving'
+                                            },
+                                            plotLines: [{
+                                                value: 0,
+                                                width: 2,
+                                                color: 'red'
+                                            }]
+                                        },
+                                        tooltip: {
+                                            valuePrefix: '$'
+                                        },
+                                        legend: {
+                                            padding: 80,
+                                            itemMarginTop: 10,
+                                            floating: true,
+                                            enabled: true,
+                                            layout: 'vertical',
+                                            align: 'left',
+                                            verticalAlign: 'top',
+                                            borderWidth: 0
+                                        },
+                                        series: [
+                                            {
+                                                name: 'saving with idealinterest',
+                                                data: idealinterest
+                                            },
+                                            {
+                                                name: 'saving with actualinterest',
+                                                data: actualinterest
+                                            }
+                                        ]
+                                    }
+                                );
                             }
                         }
                     );
+                    
                     $('#welcome').replaceWith('<div id = \'welcome\' class = \'row\' style = \'padding-bottom: 1em;\'>Welcome ' + name + '!</div>');
-                    $('#tableCellDOB').replaceWith('<div class = \'col-sm-6\' id = \'tableCellDOB\'>' + DOB + '</div>');
-                    $('#tableCellIncome').replaceWith('<div class = \'col-sm-6\' id = \'tableCellIncome\'>$' + income + '</div>');
+                    //$('#tableCellDOB').replaceWith('<div class = \'col-sm-2\' id = \'tableCellDOB\'>' + DOB + '</div>');
+                    $('#tableCellIncome').replaceWith('<div class = \'col-sm-2\' id = \'tableCellIncome\'>$' + income + '</div>');
                     $('#tableCellIncome').css('color', 'red');
-                    $('#savingsCell').replaceWith('<div class = \'col-sm-6\' id = \'savingsCell\'>$' + savings + '</div>');
+                    $('#savingsCell').replaceWith('<div class = \'col-sm-2\' id = \'savingsCell\'>$' + savings + '</div>');
                     $('#savingsCell').css('color', 'red');
-                    $('#retireAgeCell').replaceWith('<div class = \'col-sm-6\' id = \'retireAgeCell\'>' + retire_age + '</div>');
+                    $('#retireAgeCell').replaceWith('<div class = \'col-sm-2\' id = \'retireAgeCell\'>' + retire_age + '</div>');
                     $('#retireAgeCell').css('color', 'red');
-                    $('#rateCell').replaceWith('<div class = \'col-sm-6\' id = \'rateCell\'>' + desired_interest + '%</div>');
+                    $('#rateCell').replaceWith('<div class = \'col-sm-2\' id = \'rateCell\'>' + desired_interest + '%</div>');
                     $('#rateCell').css('color', 'red');
                   
                   
@@ -169,267 +306,13 @@ $(document).ready(
                           $('#suggested_class').replaceWith('<div class = \'col-md-12\' id = \'suggested_class\'>' + 'Low Risk' +  
                              '</div>');
                         $('#suggested_class').css('color', 'blue');
-                       
                     }
                   
-                   //if success show the graph
-                  
-                   //      GOOGLE CHART
+
+
+
 //--------------------------------------------------------------------------------------------------------------------
-                    
-//                  var data = new google.visualization.DataTable();
-//                    data.addColumn('number', 'X');
-//                    data.addColumn('number', 'saving with desired interest');
-//
-//                  
-//                 var d = new Date() ;
-//                  var d  = Date.parse(d);
-//                var D = Date.parse(DOB);
-//                  var age = d - D;
-//                  var minutes = 1000 * 60;
-//                  var hours = minutes * 60;
-//                  var days = hours * 24;
-//                  var years = days * 365;
-//
-//                  var currentAge = Math.round(age / years);
-//                  
-//                      
-//               //  var idealInterest = [];
-//                   var income = parseFloat(income);
-//                   var savings = parseFloat(savings);
-//                   var retire_age = parseFloat(retire_age);
-//                   var desired_interest = parseFloat(desired_interest);
-//               
-//                   var totalSavings = 0;
-//                   var inflation = .04;
-//                   var death = 80;
-//                   var expense = income - savings;
-//                  
-//                var actualRate =(desired_interest/ 100.0)  - inflation ;
-//  
-//                  
-//                  for ( i = currentAge; i <= retire_age; i++ ) {
-//                    totalSavings = (totalSavings + savings) * (1 + actualRate);
-//                    totalSavings = Math.round(totalSavings);
-//                 //   idealInterest[i] = totalSavings;
-//                    console.log("year = " + i + " amount = " + totalSavings);
-//                  console.log(savings);
-//                 // data.addRow();
-//                 // data.addRow([i,totalSavings]);
-//                  
-//                }
-//
-//                for ( i = retire_age + 1; i <= death; i++ ) {
-//                    totalSavings = (totalSavings - expense) * (1 + actualRate);
-//                    totalSavings = Math.round(totalSavings);
-//                //  idealInterest[i] = totalSavings;
-//                    console.log("second loop year = " + i + " amount = " + totalSavings);
-//                  
-//                 // data.addRow();
-//                 // data.addRow([i,totalSavings]);
-//                  
-//                }
-//              
-//
-//  
-//
-//      var options = {
-//        hAxis: {
-//          title: 'Age'
-//        },
-//        vAxis: {
-//          title: 'Total Saving'
-//        },
-//        series: {
-//          1: {curveType: 'function'}
-//        },
-//        
-//        backgroundColor :{
-//        fill:'transparent'
-//        
-//      }
-//      };
-//
-//      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-//      chart.draw(data, {width: 500, height: 500});
-//      chart.draw(data, options);
-//                  
-              
-//--------------------------------------------------------------------------------------------------------------------
-
-//         high chart         
-//--------------------------------------------------------------------------------------------------------------------
-
-                  
-                  
-                  
-               
-                  var d = new Date() ;
-                  var d  = Date.parse(d);
-                  var D = Date.parse(DOB);
-                  var age = d - D;
-                  var minutes = 1000 * 60;
-                  var hours = minutes * 60;
-                  var days = hours * 24;
-                  var years = days * 365;
-
-                  var currentAge = Math.round(age / years);
-                  
-                   
-                   var income = parseFloat(income);
-                   var savings = parseFloat(savings);
-                   var retire_age = parseFloat(retire_age);
-                   var desired_interest = parseFloat(desired_interest);
-               
-                   var totalSavings = 0;   //with idealinterest
-                   var realSaving = 0;      //with realinterest
-                   var inflation = .04;
-                   var death = 80;
-                   var expense = income - savings;
-                  
-                   var actualRate =(desired_interest/ 100.0)  - inflation ;  
-                   var realinterest=   sessionStorage.getItem('interest');
-                  
-                   var agearray = [];
-                   for (i = currentAge; i <= 80; i++ ){
-                    
-                    agearray.push(i);
-                    
-                  }
-                  
-//---------------------------idealinterest--------------------------------------------
-                    var idealinterest = [];
-                    for ( i = currentAge; i <= retire_age; i++ ) {
-                    totalSavings = (totalSavings + savings) * (1 + actualRate);
-                    totalSavings = Math.round(totalSavings);
-                    
-                    console.log("year = " + i + " amount = " + totalSavings);
-                    console.log(savings);
-                     
-                    idealinterest.push(totalSavings);
-            
-                }
-
-                for ( i = retire_age + 1; i <= death; i++ ) {
-                    totalSavings = (totalSavings - expense) * (1 + actualRate);
-                    totalSavings = Math.round(totalSavings);
-                //  idealInterest[i] = totalSavings;
-                    console.log("second loop year = " + i + " amount = " + totalSavings);
-            
-                  idealinterest.push(totalSavings);
-                }
-                   console.log(idealinterest);
-                 console.log(agearray);
-                  
-//---------------------------actualinterest--------------------------------------------     
-                  var  actualinterest = [];
-                  
-                  for ( i = currentAge; i <= retire_age; i++ ) {
-                    realSaving = (realSaving + savings) * (1 + realinterest);//with actualinterest
-                    realSaving = Math.round(realSaving);
-            
-                    console.log("1.real year = " + i + " amount = " + realSaving);
-                  //  console.log(savings);
-                     
-                      actualinterest.push(realSaving);
-            
-                }
-
-                for ( i = retire_age + 1; i <= death; i++ ) {
-                    realSaving = (realSaving - expense) * (1 + realinterest);//with actualinterest
-                    realSaving = Math.round(realSaving);
-                //  idealInterest[i] = totalSavings;
-                    console.log("2.real year = " + i + " amount = " + realSaving);
-            
-                  actualinterest.push(realSaving);
-                }
-                  
-                  
-                  
-//---------loadchart---------     
-           Highcharts.chart('container', {
-             chart: {
-      backgroundColor: null,
-      style: {
-         fontFamily: 'Signika, serif'
-      }
-   },
-        title: {
-            text: 'Total saving Chart',
-            x: -20 //center
-        },    
-        xAxis: {
-          title: {
-                text: 'Age'
-            },
-            categories: agearray },
-        yAxis: {
-            title: {
-                text: 'Total Saving'
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
-//          plotOptions: {
-//            line: {
-//                dataLabels: {
-//                    enabled: true
-//                },
-//                enableMouseTracking: false
-//            }
-//        },
-        tooltip: {
-            valuePrefix: '$'
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle',
-            borderWidth: 0
-        },
-        series: [{
-            name: 'saving with idealinterest',
-            data: idealinterest
-        }
-//                 ,{
-//                type: 'flags',
-//                data: [{
-//                    x: currentAge,
-//                    title: 'Current Year',
-//                    text: 'Shape: "circlepin"'
-//                }]
-//        }
-                 ,
-                 
-                 
-                 
-                 
-                 
-           {
-            name: 'saving with actualinterest',
-            data: actualinterest
-           }
-                 
-//                 ,{
-//                type: 'flags',
-//                data: [{
-//                    x: currentAge,
-//                    title: 'Current Year',
-//                    text: 'Shape: "circlepin"'
-//                }
-                    ]
-                   
-            }
-         
-                  
-                  
-                  
-           );
-//--------------------------------------------------------------------------------------------------------------------
-                     },//end of success
+                },//end of success
                 error: function(error) {
                     alert('Error!  Cannot get information!');
                     localStorage.setItem('logged_in', false);
@@ -438,9 +321,7 @@ $(document).ready(
             }
         );
     }
-  
- 
-  );
+);
 
 $(
     function() {
@@ -453,13 +334,3 @@ $(
         );
     }
 );
-
-
-
-
-
-
-
-
-
-

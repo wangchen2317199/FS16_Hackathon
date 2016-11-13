@@ -1,6 +1,38 @@
-body {
+#r1 {
     background-color: floralwhite;
-    background-image: url('../img/background-temp.jpg');
+    background-image: url('../img/BG1.jpg');
+    background-repeat: no-repeat;
+    background-position: 0em 0em;
+    background-size: 100%;
+}
+
+#r2 {
+    background-color: floralwhite;
+    background-image: url('../img/BG2.jpg');
+    background-repeat: no-repeat;
+    background-position: 0em 0em;
+    background-size: 100%;
+}
+
+#r3 {
+    background-color: floralwhite;
+    background-image: url('../img/BG3.jpg');
+    background-repeat: no-repeat;
+    background-position: 0em 0em;
+    background-size: 100%;
+}
+
+#r4 {
+    background-color: floralwhite;
+    background-image: url('../img/BG4.jpg');
+    background-repeat: no-repeat;
+    background-position: 0em 0em;
+    background-size: 100%;
+}
+
+#over {
+    background-color: floralwhite;
+    background-image: url('../img/BG1.jpg');
     background-repeat: no-repeat;
     background-position: 0em 0em;
     background-size: 100%;
@@ -146,4 +178,23 @@ body {
     border-bottom: 2px solid orange;
     margin-left: 0em;
     margin-top: 2.5em;
+}
+
+.x {
+    font-family: 'Trebuchet MS';
+    font-size: 1.5em;
+}
+
+.x text {
+    stroke: red;
+}
+
+.y {
+    font-family: 'Trebuchet MS';
+    font-size: 1.5em;
+    color: red;
+}
+
+.y text {
+    stroke: red;
 }
