@@ -55,10 +55,10 @@ SinglyList.prototype.searchNodeAt = function(position) {
 SinglyList.prototype.remove = function(position) {
     var currentNode = this.head,
         length = this._length,
-        count = 0,
+        count = 2,
         message = {failure: 'Failure: non-existent node in this list.'},
-        beforeNodeToDelete = null,
-        nodeToDelete = null,
+        beforeNodeToDelete = currentNode,
+        nodeToDelete = currentNode.next,
         deletedNode = null;
  
     // 1st use-case: an invalid position
@@ -78,8 +78,8 @@ SinglyList.prototype.remove = function(position) {
  
     // 3rd use-case: any other node is removed
     while (count < position) {
-        beforeNodeToDelete = currentNode;
-        nodeToDelete = currentNode.next;
+        beforeNodeToDelete = beforeNodeToDelete.next;
+        nodeToDelete = nodeToDelete.next;
         count++;
     }
  

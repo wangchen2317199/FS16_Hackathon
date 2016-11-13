@@ -31,6 +31,7 @@ $(document).ready(
                     var symbols = '';
                     investments.forEach(
                         function(object) {
+                            console.log(object.index);
                             symbols += ',' + object.symbol;
                             oldsum += parseInt(object.shares) * parseFloat(object.price.replace('$',''));
                             var noDuplicate = true;

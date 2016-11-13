@@ -131,11 +131,10 @@ function next() {
 }
 
 function delInv(j) {
-    var node = new Node();
-    node = investments.head;
+    var node = investments.head;
     var position = 1;
     while (node) {
-        if (node.data.index === j) {
+        if (parseInt(node.data.index) === parseInt(j)) {
             break;
         }
         else {
