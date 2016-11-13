@@ -36,7 +36,7 @@ $(document).ready(
                             var noDuplicate = true;
                             for (var k = 0; k < investmentsBySymbol.length; k++) {
                                 if (investmentsBySymbol[k].symbol === object.symbol) {
-                                    investmentsBySymbol[k].totalPrice += parseFloat(object.price) * parseInt(object.shares);
+                                    investmentsBySymbol[k].totalPrice += parseFloat(object.price.replace('$','')) * parseInt(object.shares);
                                     noDuplicate = false;
                                 }
                             }
@@ -88,45 +88,23 @@ $(document).ready(
                                         var dollarProfit = currentValue - parseFloat(obj2.totalPrice);
                                         var percentProfit = dollarProfit / parseFloat(obj2.totalPrice);
                                         var valueAfterFiveYears = currentValue * Math.pow(1 + percentProfit, 5);
+                                        var negativePercentProfit = 0 - percentProfit;
+                                        var valueAfterLoss = currentValue * Math.pow(1 + negativePercentProfit, 5);
                                         $('#s_details').append(
                                             '<div class = \'row\'>' +
-                                            '<div class = \'col-sm-2\' align = \'center\'>' + obj2.symbol + '</div>' +
-                                            '<div class = \'col-sm-2\' align = \'center\'>$' + obj2.totalPrice + '</div>' +
-                                            '<div class = \'col-sm-2\' align = \'center\' style = \'color: black;\'>$' + currentValue + '</div>' +
-                                            '<div class = \'col-sm-2\' align = \'center\' style = \'color: ' + redOrGreen(dollarProfit) + ';\'>$' + dollarProfit.toFixed(2) + '</div>' +
+                                            '<div class = \'col-sm-1\' align = \'center\'>' + obj2.symbol + '</div>' +
+                                            '<div class = \'col-sm-2\' align = \'center\'>$' + parseFloat(obj2.totalPrice).toFixed(2) + '</div>' +
+                                            '<div class = \'col-sm-2\' align = \'center\' style = \'color: black;\'>$' + currentValue.toFixed(2) + '</div>' +
+                                            '<div class = \'col-sm-1\' align = \'center\' style = \'color: ' + redOrGreen(dollarProfit) + ';\'>$' + dollarProfit.toFixed(2) + '</div>' +
                                             '<div class = \'col-sm-2\' align = \'center\' style = \'color: ' + redOrGreen(dollarProfit) + ';\'><strong>' + (percentProfit * 100).toFixed(2) + '%</strong></div>' +
                                             '<div class = \'col-sm-2\' align = \'center\' style = \'color: blue;\'><strong>$' + valueAfterFiveYears.toFixed(2) + '</strong></div>' +
+                                            '<div class = \'col-sm-2\' align = \'center\' style = \'color: gray;\'>$' + valueAfterLoss.toFixed(2) + '</div>' +
                                             '</div>'
                                         );
                                     }
                                 );
-    //                            investments.forEach(
-    //                              function(object) {
-    //                                  
-    //                                  
-    //                                  $('#s_details').append(
-    //                                      '<div class = \'row\' id = \'' + object.symbol + '\'>' +
-    //                                      '<div class = \'col-sm-2\'>' + object.symbol + '</div>' +
-    //                                      '<div class = \'col-sm-2\'>' + object.symbol + '</div>' +
-    //                                      '<div class = \'col-sm-2\' style = \'color: red;\'>' + object.price + '</div>' +
-    //                                      '<div class = \'col-sm-2\'>' + object.shares + '</div>' +
-    //                                      '</div>'
-    //                                  );
-    //                                  quotes.forEach(
-    //                                      function(obj2) {
-    //                                          if(obj2.symbol.toUpperCase() === object.symbol) {
-    //                                              $('#' + obj2.symbol.toUpperCase()).append(
-    //                                                  '<div class = \'col-sm-3\' style = \'color:red;\'><strong>' +
-    //                                                  '$' + obj2.LastTradePriceOnly +
-    //                                                  '</strong></div>'
-    //                                              );
-    //                                          }
-    //                                      }
-    //                                  );
-    //                              }
-    //                          );
-
-    //caculate the actual interest
+                                
+                                // Caculate the actual interest.
                                 var interest = (newsum - oldsum) / oldsum;
                                 sessionStorage.setItem('interest', interest);
                             }
