@@ -4,6 +4,8 @@
 Joshua Neutrom (#39), Yunlong Liu (#25), Chen Wang (#58),  Dayu Wang (#59) 
 
 ## Link to Page
+http://investmentplanner.s3-website-us-east-1.amazonaws.com/
+
 
 ## Description
 Goal: encourage a user to save by showing the user the potential longterm effects of their investment strategies using one fund family
